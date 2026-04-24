@@ -100,7 +100,7 @@ public async Task<ActionResult<CompanyDto>> GetCompany(int id)
             company.Email = dto.Email;
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
-                company.Password = dto.Password; 
+                company.PasswordHash = dto.Password; 
             
             try
             {
@@ -148,7 +148,7 @@ public async Task<ActionResult<CompanyDto>> CreateCompany(CompanyDto dto)
         PhoneNumber = dto.PhoneNumber,
         RegistrationNumber = dto.RegistrationNumber,
         Email = dto.Email,
-        Password = dto.Password,
+        PasswordHash = dto.Password,
         Country = (Country)(dto.Country == 0 ? 2 : dto.Country), 
         RemID = dto.RemID == 0 ? null : dto.RemID
     };
@@ -169,7 +169,7 @@ public async Task<ActionResult<CompanyDto>> CreateCompany(CompanyDto dto)
 public async Task<ActionResult> Login([FromBody] LoginDto dto)
 {
     var company = await _context.Companies
-        .FirstOrDefaultAsync(c => c.Email == dto.Email && c.Password == dto.Password);
+        .FirstOrDefaultAsync(c => c.Email == dto.Email && c.PasswordHash == dto.Password);
 
     if (company == null)
         return Unauthorized("Invalid email or password");
